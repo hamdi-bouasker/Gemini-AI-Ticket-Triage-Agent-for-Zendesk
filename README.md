@@ -18,3 +18,40 @@ ZENDESK_EMAIL="your-admin-email@company.com"
 ZENDESK_API_TOKEN="your_zendesk_api_token"
 GEMINI_API_KEY="your_google_gemini_api_key"
 ```
+
+## 🚀 Setting up Zendesk Integration
+
+Go to Zendesk Admin Center > Apps and Integrations > Webhooks.
+
+Create a new Webhook:
+
+#### Endpoint URL: https://your-domain.com/api/v1/webhook/zendesk
+
+#### Request Method: POST
+
+#### Request Format: JSON
+
+Go to `Objects and Rules > Business Rules > Triggers`.
+
+Create a new Trigger named Gemini AI Triage:
+
+```
+Conditions: Ticket is Created
+
+Actions: Notify active webhook -> Select your Gemini Webhook.
+
+JSON Body payload:
+
+JSON
+     {
+       "ticket_id": "{{ticket.id}}",
+       "subject": "{{ticket.subject}}",
+       "description": "{{ticket.description}}"
+     }
+```
+
+## 🔒 Production Best Practices Implemented
+
+* **Asynchronous Offloading:** Built on Python's async/await paradigms utilizing `BackgroundTasks` to prevent webhooks hanging or causing API response lag inside the primary CRM interface.
+* **Agent Guardrails:** The model is entirely locked into an internal-facing persona. It cannot reply to end-users directly, completely cutting off the vector of public-facing hallucinations.
+* **Strict Schema Contracts:** Leverages `response_schema` directly at the compiler level inside the Google GenAI SDK to guarantee the incoming telemetry strings match specific database keys exactly.
