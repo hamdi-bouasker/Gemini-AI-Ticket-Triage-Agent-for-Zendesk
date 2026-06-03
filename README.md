@@ -49,6 +49,7 @@ JSON
        "description": "{{ticket.description}}"
      }
 ```
+The Webhook-Middleware.py script uses FastAPI to handle incoming webhooks from Zendesk. It uses the modern Google GenAI SDK to analyze the ticket, enforce a clean JSON schema for triage metrics, and securely update the ticket back in Zendesk using an internal note.
 
 ## 🔒 Production Best Practices Implemented
 
